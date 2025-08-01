@@ -21,60 +21,27 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          react: ['react', 'react-dom', 'react-router-dom'],
-          vendor: ['lodash', 'axios', 'date-fns'],
-          ui: [
-            '@radix-ui/react-accordion',
-            '@radix-ui/react-alert-dialog',
-            '@radix-ui/react-aspect-ratio',
-            '@radix-ui/react-avatar',
-            '@radix-ui/react-checkbox',
-            '@radix-ui/react-collapsible',
-            '@radix-ui/react-context-menu',
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-hover-card',
-            '@radix-ui/react-label',
-            '@radix-ui/react-menubar',
-            '@radix-ui/react-navigation-menu',
-            '@radix-ui/react-popover',
-            '@radix-ui/react-progress',
-            '@radix-ui/react-radio-group',
-            '@radix-ui/react-scroll-area',
-            '@radix-ui/react-select',
-            '@radix-ui/react-separator',
-            '@radix-ui/react-slider',
-            '@radix-ui/react-slot',
-            '@radix-ui/react-switch',
-            '@radix-ui/react-tabs',
-            '@radix-ui/react-toast',
-            '@radix-ui/react-toggle',
-            '@radix-ui/react-toggle-group',
-            '@radix-ui/react-tooltip',
-            'class-variance-authority',
-            'clsx',
-            'cmdk',
-            'input-otp',
-            'lucide-react',
-            'next-themes',
-            'sonner',
-            'tailwind-merge',
-            'tailwindcss-animate',
-            'tw-animate-css',
-            'vaul',
-            'wouter'
-          ],
-          charts: ['recharts'],
-          forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
-          animations: ['framer-motion', 'tailwindcss-animate'],
-          tanstack: ['@tanstack/react-query'],
-          carousel: ['embla-carousel-react'],
-          panels: ['react-resizable-panels'],
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            // Group large dependencies
+            if (id.includes('@radix-ui')) return 'radix';
+            if (id.includes('framer-motion')) return 'framer';
+            if (id.includes('recharts')) return 'charts';
+            if (id.includes('react-hook-form') || id.includes('zod')) return 'forms';
+            if (id.includes('@tanstack/react-query')) return 'tanstack';
+            if (id.includes('embla-carousel')) return 'carousel';
+            if (id.includes('react-resizable-panels')) return 'panels';
+            if (id.includes('lucide-react')) return 'icons';
+            if (id.includes('sonner')) return 'toast';
+            if (id.includes('@supabase/supabase-js')) return 'supabase';
+            
+            // Group remaining node_modules
+            return 'vendor';
+          }
         }
       }
     },
-    chunkSizeWarningLimit: 1000
+    chunkSizeWarningLimit: 1000 // Increase warning limit
   },
   server: {
     fs: {
