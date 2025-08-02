@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  base: "./", // Changed to relative path
+  base: "/", // Keep as root
   plugins: [react()],
   resolve: {
     alias: {
@@ -16,40 +16,15 @@ export default defineConfig({
       "@assets": path.resolve(__dirname, "../../attached_assets"),
     },
   },
-  root: __dirname,
   build: {
     outDir: path.resolve(__dirname, "dist"),
     emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules')) {
-            if (id.includes('@radix-ui')) return 'radix';
-            if (id.includes('framer-motion')) return 'framer';
-            if (id.includes('recharts')) return 'charts';
-            if (id.includes('react-hook-form') || id.includes('zod')) return 'forms';
-            if (id.includes('@tanstack/react-query')) return 'tanstack';
-            if (id.includes('embla-carousel')) return 'carousel';
-            if (id.includes('react-resizable-panels')) return 'panels';
-            if (id.includes('lucide-react')) return 'icons';
-            if (id.includes('sonner')) return 'toast';
-            if (id.includes('@supabase/supabase-js')) return 'supabase';
-            if (id.includes('jszip')) return 'zip';
-            return 'vendor';
-          }
-        }
-      }
-    },
     chunkSizeWarningLimit: 1000
   },
   server: {
     fs: {
-      strict: true,
-      deny: ["**/.*"],
-    },
-    watch: {
-      usePolling: true,
-    },
+      strict: true
+    }
   },
   css: {
     postcss: {

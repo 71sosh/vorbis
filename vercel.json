@@ -11,35 +11,18 @@
   ],
   "routes": [
     {
-      "src": "/(.*\\.(ico|png|jpg|jpeg|gif|svg|css|js|json))",
+      "src": "/(.*\\.\\w+)",
       "headers": {
         "Cache-Control": "public, max-age=31536000, immutable"
       },
       "dest": "/$1"
     },
     {
-      "src": "/assets/(.*)",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      },
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/static/(.*)",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      },
-      "dest": "/static/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "dest": "/index.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
     }
   ]
 }

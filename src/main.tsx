@@ -5,12 +5,10 @@ import './index.css';
 import { supabase } from './lib/supabaseClient';
 
 // Handle Vercel redirect for SPA
-if (sessionStorage.redirect) {
-  const redirect = sessionStorage.redirect;
-  delete sessionStorage.redirect;
-  if (redirect !== window.location.href) {
-    window.history.replaceState(null, '', redirect);
-  }
+const urlParams = new URLSearchParams(window.location.search);
+const redirect = urlParams.get('redirect');
+if (redirect) {
+  window.history.replaceState(null, '', redirect);
 }
 
 // Supabase auth handling
