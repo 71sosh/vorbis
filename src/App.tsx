@@ -8,36 +8,12 @@ import { Toaster } from "sonner";
 import LoadingSpinner from '@/components/loading-spinner';
 import '@/index.css';
 
-// Optimized lazy loading with prefetch
-const lazyWithPrefetch = (factory: () => Promise<{ default: React.ComponentType<any> }>) => {
-  const Component = lazy(factory);
-  const prefetch = () => factory().then(module => module);
-  return Object.assign(Component, { prefetch });
-};
-
-const HomePage = lazyWithPrefetch(() => import('@/pages/home-page'));
-const AuthPage = lazyWithPrefetch(() => import('@/pages/auth-page'));
-const DashboardBuilder = lazyWithPrefetch(() => import('@/pages/dashboard-builder'));
-const UsersAccount = lazyWithPrefetch(() => import('@/pages/users-account'));
-const NotFound = lazyWithPrefetch(() => import('@/pages/not-found'));
-
-// Prefetch routes on hover
-const PrefetchLink = ({ to, children }: { to: string; children: React.ReactNode }) => {
-  const handleMouseEnter = () => {
-    switch (to) {
-      case '/': HomePage.prefetch(); break;
-      case '/login': AuthPage.prefetch(); break;
-      case '/builder': DashboardBuilder.prefetch(); break;
-      case '/account': UsersAccount.prefetch(); break;
-    }
-  };
-
-  return (
-    <div onMouseEnter={handleMouseEnter}>
-      {children}
-    </div>
-  );
-};
+// Lazy load pages
+const HomePage = lazy(() => import('@/pages/home-page'));
+const AuthPage = lazy(() => import('@/pages/auth-page'));
+const DashboardBuilder = lazy(() => import('@/pages/dashboard-builder'));
+const UsersAccount = lazy(() => import('@/pages/users-account'));
+const NotFound = lazy(() => import('@/pages/not-found'));
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -55,7 +31,7 @@ function App() {
       <ThemeProvider>
         <TooltipProvider>
           <Toaster position="top-center" richColors />
-          <Router>
+          <Router basename="/">
             <ScrollToTop />
             <Suspense fallback={<LoadingSpinner fullScreen={true} />}>
               <Routes>

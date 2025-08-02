@@ -4,40 +4,46 @@ import App from './App';
 import './index.css';
 import { supabase } from './lib/supabaseClient';
 
-// Simplified redirect logic
-const redirect = sessionStorage.redirect;
-delete sessionStorage.redirect;
-if (redirect && redirect !== location.href) {
-  history.replaceState(null, '', redirect);
-}
-
-// Improved auth state handling
-supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_OUT') {
-    localStorage.removeItem('supabaseSession');
-  } else if (session) {
-    localStorage.setItem('supabaseSession', JSON.stringify(session));
+// Only run in browser environment
+if (typeof window !== 'undefined') {
+  // Redirect logic
+  const redirect = sessionStorage.redirect;
+  delete sessionStorage.redirect;
+  if (redirect && redirect !== location.href) {
+    history.replaceState(null, '', redirect);
   }
-});
 
-// Initialize auth session
-const initSession = async () => {
-  const sessionString = localStorage.getItem('supabaseSession');
-  if (sessionString) {
-    try {
-      const session = JSON.parse(sessionString);
-      await supabase.auth.setSession(session);
-    } catch (error) {
-      console.error('Session restore error:', error);
+  // Auth handling
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') {
       localStorage.removeItem('supabaseSession');
+    } else if (session) {
+      localStorage.setItem('supabaseSession', JSON.stringify(session));
     }
-  }
-};
+  });
 
-initSession().then(() => {
-  ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-});
+  // Initialize session
+  const initSession = async () => {
+    const sessionString = localStorage.getItem('supabaseSession');
+    if (sessionString) {
+      try {
+        const session = JSON.parse(sessionString);
+        await supabase.auth.setSession(session);
+      } catch (error) {
+        console.error('Session restore error:', error);
+        localStorage.removeItem('supabaseSession');
+      }
+    }
+  };
+
+  initSession().then(() => {
+    ReactDOM.createRoot(document.getElementById('root')!).render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+  });
+} else {
+  // SSR fallback
+  console.log('Server-side environment detected');
+}
