@@ -4,7 +4,14 @@ import App from './App';
 import './index.css';
 import { supabase } from './lib/supabaseClient';
 
-// Add Supabase auth state listener
+// Add redirect logic for Vercel
+const redirect = sessionStorage.redirect;
+delete sessionStorage.redirect;
+if (redirect && redirect !== location.href) {
+  history.replaceState(null, '', redirect);
+}
+
+// Supabase auth handling
 supabase.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_OUT') {
     localStorage.clear();
@@ -15,7 +22,7 @@ supabase.auth.onAuthStateChange((event, session) => {
   }
 });
 
-// Check for existing session on load
+// Restore session
 const initSession = async () => {
   const sessionString = localStorage.getItem('supabaseSession');
   if (sessionString) {
