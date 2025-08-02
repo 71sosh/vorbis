@@ -1,15 +1,22 @@
-// src/lib/supabaseClient.ts
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Add your Supabase URL and API key here
+const supabaseUrl = process.env.VITE_SUPABASE_URL || 'YOUR_SUPABASE_URL';
+const supabaseKey = process.env.VITE_SUPABASE_KEY || 'YOUR_SUPABASE_KEY';
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('Supabase URL:', supabaseUrl);
-  console.error('Supabase Key:', supabaseKey?.substring(0, 10) + '...');
-  throw new Error(
-    'Missing Supabase credentials. Please check your .env file'
-  );
+  console.error('Supabase URL or Key is missing!');
+  console.log('Supabase URL:', supabaseUrl);
+  console.log('Supabase Key:', supabaseKey ? '***' + supabaseKey.slice(-4) : 'undefined');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  }
+});
+
+// Debugging
+console.log('Supabase client initialized:', !!supabase);

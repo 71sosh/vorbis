@@ -4,16 +4,29 @@ import App from './App';
 import './index.css';
 import { supabase } from './lib/supabaseClient';
 
-// Ensure we're in browser environment
+// Only run in browser environment
 if (typeof window !== 'undefined') {
-  // Add redirect logic for Vercel
+  // Redirect logic
   const redirect = sessionStorage.redirect;
   delete sessionStorage.redirect;
   if (redirect && redirect !== location.href) {
     history.replaceState(null, '', redirect);
   }
 
-  // Supabase auth handling
+  // Create root element immediately
+  const rootElement = document.getElementById('root');
+  if (!rootElement) {
+    console.error('Root element not found!');
+  } else {
+    // Render the app immediately
+    ReactDOM.createRoot(rootElement).render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+  }
+
+  // Auth handling
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_OUT') {
       localStorage.removeItem('supabaseSession');
@@ -22,7 +35,7 @@ if (typeof window !== 'undefined') {
     }
   });
 
-  // Initialize session
+  // Initialize session in the background
   const initSession = async () => {
     const sessionString = localStorage.getItem('supabaseSession');
     if (sessionString) {
@@ -34,19 +47,9 @@ if (typeof window !== 'undefined') {
         localStorage.removeItem('supabaseSession');
       }
     }
-    
-    // Create root after session initialization
-    const rootElement = document.getElementById('root');
-    if (rootElement) {
-      ReactDOM.createRoot(rootElement).render(
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      );
-    } else {
-      console.error('Root element not found');
-    }
   };
 
   initSession();
+} else {
+  console.log('Server-side environment detected');
 }

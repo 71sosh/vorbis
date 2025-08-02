@@ -7,8 +7,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  base: "/", // Critical for Vercel routing
-  plugins: [react()],
+  base: "/",
+  plugins: [react()], // Removed babel plugin configuration
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
@@ -20,6 +20,7 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, "dist"),
     emptyOutDir: true,
+    sourcemap: true, // Keep sourcemaps for debugging
     rollupOptions: {
       output: {
         manualChunks: (id) => {
@@ -42,7 +43,7 @@ export default defineConfig({
         }
       }
     },
-    chunkSizeWarningLimit: 1500
+    chunkSizeWarningLimit: 2000
   },
   server: {
     fs: {
@@ -59,9 +60,8 @@ export default defineConfig({
         require('tailwindcss'),
         require('autoprefixer'),
       ],
-    },
+    }
   },
-  // Critical optimization for Vercel deployment
   optimizeDeps: {
     include: [
       'react',
@@ -71,14 +71,19 @@ export default defineConfig({
       '@supabase/supabase-js',
       'framer-motion',
       'lucide-react',
-      'sonner'
+      'sonner',
+      'zod',
+      'react-hook-form'
     ],
     esbuildOptions: {
       target: 'es2020',
+      supported: {
+        'top-level-await': true
+      }
     }
   },
-  // Fix for Vercel environment variables
   define: {
-    'process.env': process.env
+    'process.env': {},
+    global: 'window'
   }
 });

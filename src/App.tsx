@@ -65,6 +65,8 @@ const ScrollToTop = () => {
 };
 
 function App() {
+  console.log('App component rendering'); // Debugging statement
+  
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
