@@ -8,6 +8,7 @@ import { Toaster } from "sonner";
 import LoadingSpinner from '@/components/loading-spinner';
 import '@/index.css';
 
+
 // Lazy load pages
 const HomePage = lazy(() => import('@/pages/home-page'));
 const AuthPage = lazy(() => import('@/pages/auth-page'));

@@ -44,6 +44,6 @@ if (typeof window !== 'undefined') {
     );
   });
 } else {
-  // SSR fallback
+  //
   console.log('Server-side environment detected');
 }
