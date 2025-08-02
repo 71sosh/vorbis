@@ -4,25 +4,23 @@ import App from './App';
 import './index.css';
 import { supabase } from './lib/supabaseClient';
 
-// Handle Vercel redirect for SPA
-const urlParams = new URLSearchParams(window.location.search);
-const redirect = urlParams.get('redirect');
-if (redirect) {
-  window.history.replaceState(null, '', redirect);
+// Simplified redirect logic
+const redirect = sessionStorage.redirect;
+delete sessionStorage.redirect;
+if (redirect && redirect !== location.href) {
+  history.replaceState(null, '', redirect);
 }
 
-// Supabase auth handling
+// Improved auth state handling
 supabase.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_OUT') {
-    localStorage.clear();
-  } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-    if (session) {
-      localStorage.setItem('supabaseSession', JSON.stringify(session));
-    }
+    localStorage.removeItem('supabaseSession');
+  } else if (session) {
+    localStorage.setItem('supabaseSession', JSON.stringify(session));
   }
 });
 
-// Restore session
+// Initialize auth session
 const initSession = async () => {
   const sessionString = localStorage.getItem('supabaseSession');
   if (sessionString) {
@@ -30,15 +28,16 @@ const initSession = async () => {
       const session = JSON.parse(sessionString);
       await supabase.auth.setSession(session);
     } catch (error) {
+      console.error('Session restore error:', error);
       localStorage.removeItem('supabaseSession');
     }
   }
 };
 
-initSession();
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+initSession().then(() => {
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+});
