@@ -4,11 +4,14 @@ import App from './App';
 import './index.css';
 import { supabase } from './lib/supabaseClient';
 
-// Add redirect logic for Vercel
-const redirect = sessionStorage.redirect;
-delete sessionStorage.redirect;
-if (redirect && redirect !== location.href) {
-  history.replaceState(null, '', redirect);
+// Add strict path check for Vercel
+const path = window.location.pathname;
+if (!path.startsWith('/static')) { // Added missing parenthesis here
+  const redirect = sessionStorage.redirect;
+  delete sessionStorage.redirect;
+  if (redirect && redirect !== location.href) {
+    history.replaceState(null, '', redirect);
+  }
 }
 
 // Supabase auth handling
