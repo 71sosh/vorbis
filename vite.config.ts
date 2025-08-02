@@ -6,8 +6,8 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export default defineConfig(({ mode }) => ({
-  base: mode === 'production' ? '/' : '/',
+export default defineConfig({
+  base: "./", // Changed to relative path
   plugins: [react()],
   resolve: {
     alias: {
@@ -59,4 +59,4 @@ export default defineConfig(({ mode }) => ({
       ],
     },
   },
-}));
+});

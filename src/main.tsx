@@ -4,11 +4,13 @@ import App from './App';
 import './index.css';
 import { supabase } from './lib/supabaseClient';
 
-// Redirect logic for Vercel
-const redirect = sessionStorage.redirect;
-delete sessionStorage.redirect;
-if (redirect && redirect !== location.href) {
-  history.replaceState(null, '', redirect);
+// Handle Vercel redirect for SPA
+if (sessionStorage.redirect) {
+  const redirect = sessionStorage.redirect;
+  delete sessionStorage.redirect;
+  if (redirect !== window.location.href) {
+    window.history.replaceState(null, '', redirect);
+  }
 }
 
 // Supabase auth handling
