@@ -23,7 +23,6 @@ export default defineConfig({
       output: {
         manualChunks: (id) => {
           if (id.includes('node_modules')) {
-            // Group large dependencies
             if (id.includes('@radix-ui')) return 'radix';
             if (id.includes('framer-motion')) return 'framer';
             if (id.includes('recharts')) return 'charts';
@@ -34,14 +33,13 @@ export default defineConfig({
             if (id.includes('lucide-react')) return 'icons';
             if (id.includes('sonner')) return 'toast';
             if (id.includes('@supabase/supabase-js')) return 'supabase';
-            
-            // Group remaining node_modules
+            if (id.includes('jszip')) return 'zip';
             return 'vendor';
           }
         }
       }
     },
-    chunkSizeWarningLimit: 1000 // Increase warning limit
+    chunkSizeWarningLimit: 1000
   },
   server: {
     fs: {

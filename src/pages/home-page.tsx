@@ -40,6 +40,12 @@ const cardHoverVariants = {
   }
 };
 
+// MERGED VARIANTS TO FIX DUPLICATE ATTRIBUTE
+const mergedCardVariants = {
+  ...itemVariants,
+  hover: cardHoverVariants.hover
+};
+
 const HomePage = () => {
   useEffect(() => {
     // Initialize animations
@@ -161,9 +167,8 @@ const HomePage = () => {
               <motion.div 
                 key={index} 
                 className="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:border-purple-300 dark:hover:border-purple-500"
-                variants={itemVariants}
+                variants={mergedCardVariants}
                 whileHover="hover"
-                variants={cardHoverVariants}
               >
                 <div className="mb-4 p-3 bg-purple-100 dark:bg-purple-900/30 w-12 h-12 rounded-lg flex items-center justify-center">
                   {feature.icon}
@@ -230,9 +235,8 @@ const HomePage = () => {
             <motion.div 
               key={index} 
               className="bg-slate-50 dark:bg-slate-800 p-8 rounded-xl border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:border-purple-300 dark:hover:border-purple-500"
-              variants={itemVariants}
+              variants={mergedCardVariants}
               whileHover="hover"
-              variants={cardHoverVariants}
             >
               <div className="flex flex-col items-center text-center">
                 <div className="mb-6 p-4 bg-purple-100 dark:bg-purple-900/30 rounded-full">
