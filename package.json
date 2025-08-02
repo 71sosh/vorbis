@@ -4,8 +4,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vite build && node -e \"const fs = require('fs'); fs.copyFileSync('dist/index.html', 'dist/404.html')\"",
+    "preview": "vite preview",
+    "serve": "node api/index.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -44,7 +45,9 @@
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
+    "express": "^4.21.2",
     "framer-motion": "^11.13.1",
+    "http-proxy-middleware": "^2.0.9",
     "input-otp": "^1.4.2",
     "jszip": "^3.10.1",
     "lucide-react": "^0.453.0",
