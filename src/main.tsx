@@ -4,16 +4,16 @@ import App from './App';
 import './index.css';
 import { supabase } from './lib/supabaseClient';
 
-// Only run in browser environment
+// Ensure we're in browser environment
 if (typeof window !== 'undefined') {
-  // Redirect logic
+  // Add redirect logic for Vercel
   const redirect = sessionStorage.redirect;
   delete sessionStorage.redirect;
   if (redirect && redirect !== location.href) {
     history.replaceState(null, '', redirect);
   }
 
-  // Auth handling
+  // Supabase auth handling
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_OUT') {
       localStorage.removeItem('supabaseSession');
@@ -34,16 +34,19 @@ if (typeof window !== 'undefined') {
         localStorage.removeItem('supabaseSession');
       }
     }
+    
+    // Create root after session initialization
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+      ReactDOM.createRoot(rootElement).render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    } else {
+      console.error('Root element not found');
+    }
   };
 
-  initSession().then(() => {
-    ReactDOM.createRoot(document.getElementById('root')!).render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    );
-  });
-} else {
-  //
-  console.log('Server-side environment detected');
+  initSession();
 }

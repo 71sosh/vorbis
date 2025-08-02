@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  base: "/", // Ensure this is set to root
+  base: "/", // Critical for Vercel routing
   plugins: [react()],
   resolve: {
     alias: {
@@ -61,8 +61,24 @@ export default defineConfig({
       ],
     },
   },
-  // Add this to prevent 404 on refresh
+  // Critical optimization for Vercel deployment
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom']
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@tanstack/react-query',
+      '@supabase/supabase-js',
+      'framer-motion',
+      'lucide-react',
+      'sonner'
+    ],
+    esbuildOptions: {
+      target: 'es2020',
+    }
+  },
+  // Fix for Vercel environment variables
+  define: {
+    'process.env': process.env
   }
 });
