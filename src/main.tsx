@@ -6,12 +6,9 @@ import { supabase } from './lib/supabaseClient';
 
 // Add Supabase auth state listener
 supabase.auth.onAuthStateChange((event, session) => {
-  console.log(`Supabase auth event: ${event}`);
   if (event === 'SIGNED_OUT') {
-    // Clear local storage or handle sign-out
     localStorage.clear();
   } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-    // Store session if exists
     if (session) {
       localStorage.setItem('supabaseSession', JSON.stringify(session));
     }
@@ -26,7 +23,6 @@ const initSession = async () => {
       const session = JSON.parse(sessionString);
       await supabase.auth.setSession(session);
     } catch (error) {
-      console.error('Error restoring session:', error);
       localStorage.removeItem('supabaseSession');
     }
   }
