@@ -1,23 +1,28 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
-export default function NotFound() {
-  const navigate = useNavigate();
-  
+const NotFound = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-          404 - Page Not Found
-        </h1>
-        <p className="text-lg text-slate-600 dark:text-slate-400 mb-8">
-          The page you are looking for doesn't exist or has been moved.
+        <h1 className="text-9xl font-bold text-purple-600">404</h1>
+        <h2 className="text-2xl font-medium text-gray-800 dark:text-gray-200 mt-4">
+          Page Not Found
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
+          The page you're looking for doesn't exist or has been moved.
         </p>
-        <Button onClick={() => navigate('/')}>
-          Go to Dashboard Builder
-        </Button>
+        <div className="mt-6">
+          <Button asChild>
+            <Link to="/" className="text-white">
+              Go to Homepage
+            </Link>
+          </Button>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default NotFound;
