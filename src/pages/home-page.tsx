@@ -125,6 +125,8 @@ const HomePage = () => {
                   V
                 </span>
                 <span className="text-black dark:text-white">orbis</span>
+                <span className="animated-gradient bg-gradient-to-r from-purple-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent"> B</span>
+                <span className="text-black dark:text-white">uilder</span>
               </div>
             </div>
           </motion.div>
@@ -297,6 +299,8 @@ const HomePage = () => {
                 V
               </span>
               <span className="text-black dark:text-white">orbis</span>
+              <span className="animated-gradient bg-gradient-to-r from-purple-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent"> B</span>
+              <span className="text-black dark:text-white">uilder</span>
             </div>
           </div>
           <div className="flex gap-6">
